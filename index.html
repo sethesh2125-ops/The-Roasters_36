@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Offline AI Tutor</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 2.2em;
+      text-shadow: 2px 2px 8px black;
+    }
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    button {
+      width: 250px;
+      padding: 15px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    button:hover {
+      background: #2193b0;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    footer {
+      position: absolute;
+      bottom: 10px;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    #content {
+      padding: 20px;
+    }
+
+    audio {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎓 Offline AI Tutor</h1>
+  <div id="homePage" class="button-container">
+  <button onclick="goToClasses()">📚 Classes</button>
+  <button onclick="goToPapers()">📄 Model Question Papers</button>
+  <button onclick="goToProgress()">📊 View Progress</button>
+  <button onclick="goToAbout()">💡 About</button>
+</div>
+ <div id="content"></div>
+
+  <audio id="audioPlayer" controls style="display:none;"></audio>
+
+  <footer>Offline Tutor | Works without Internet 🌍</footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
