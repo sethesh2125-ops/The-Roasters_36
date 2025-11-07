@@ -1,31 +1,28 @@
-// main.js - Complete Corrected Script
+// main.js - Final Script with All Features
 
 // Register offline service worker
 if ('serviceWorker' in navigator) {
-    // Note: The 'service-worker.js' file must exist for this to work offline.
-    navigator.serviceWorker.register('service-worker.js');
+    // You should also have a service-worker.js file for true offline functionality
+    navigator.serviceWorker.register('service-worker.js'); 
 }
 
 // References
 const content = document.getElementById('content');
-const audio = document.getElementById('audioPlayer');
+const video = document.getElementById('videoPlayer'); 
 const homePage = document.getElementById('homePage');
-const pageTitle = document.querySelector('h1'); // Reference to the main title
+const pageTitle = document.querySelector('h1');
 
 // --- Core Navigation ---
 
-/**
- * Resets the view back to the main home page buttons.
- */
 function goHome() {
-    homePage.style.display = 'flex'; // Show the home buttons
-    content.innerHTML = '';          // Clear the content area
-    audio.style.display = 'none';    // Hide the audio player
-    audio.pause();                   // Pause any running audio
-    pageTitle.innerHTML = '🎓 Offline AI Tutor'; // Reset the main title
+    homePage.style.display = 'flex';
+    content.innerHTML = '';
+    video.style.display = 'none';
+    video.pause();
+    pageTitle.innerHTML = '🎓 Offline AI Tutor';
 }
 
-// --- Main Menu Functions (These correspond to the initial HTML buttons) ---
+// --- Main Menu Functions ---
 
 function goToClasses() {
     homePage.style.display = 'none';
@@ -40,22 +37,76 @@ function goToClasses() {
         <br><br>
         <button onclick="goHome()">🏠 Back Home</button>
     `;
-    audio.style.display = 'none';
+    video.style.display = 'none';
+}
+
+function goToCompetitiveExams() {
+    homePage.style.display = 'none';
+    video.style.display = 'none';
+    pageTitle.innerHTML = '🏅 Competitive Exam Prep';
+
+    content.innerHTML = `
+        <h2>🏅 Competitive Exam Prep</h2>
+        <p>Select an exam type to access sample papers and practice questions. All resources are available offline!</p>
+
+        <div class="button-container" style="gap:15px;">
+            <button onclick="showExamResources('NTSE')">🏆 NTSE (National Talent Search Exam)</button>
+            <button onclick="showExamResources('Olympiads')">⚛️ Science & Math Olympiads</button>
+            <button onclick="showExamResources('Scholarship')">💰 State Scholarship Exams</button>
+        </div>
+        
+        <br><br>
+        <button onclick="goHome()">🏠 Back Home</button>
+    `;
+}
+
+function showExamResources(examName) {
+    pageTitle.innerHTML = `${examName} Resources`;
+    let paperLinks;
+
+    // Correctly displays NTSE files (ntse_paperX.pdf)
+    if (examName === 'NTSE') {
+        paperLinks = `
+            <a href="ntse_paper1.pdf" target="_blank">📄 NTSE Paper 1 (SAT)</a>
+            <a href="ntse_paper2.pdf" target="_blank">⏱️ NTSE Paper 2 (MAT)</a>
+            <a href="ntse_paper3.pdf" target="_blank">📄 NTSE Paper 3 (Mock Test)</a>
+        `;
+    } else {
+        // Default structure for other exams
+        paperLinks = `
+            <a href="${examName.toLowerCase()}_paper1.pdf" target="_blank">📄 Paper 1 (Year 2023)</a>
+            <a href="${examName.toLowerCase()}_paper2.pdf" target="_blank">⏱️ Mock Test 1 (Timed)</a>
+            <a href="${examName.toLowerCase()}_paper3.pdf" target="_blank">📄 Paper 2 (Year 2022)</a>
+        `;
+    }
+
+    content.innerHTML = `
+        <h2>${examName} Practice Materials</h2>
+        <p>Download previous year papers and timed mock tests for **${examName}**.</p>
+        
+        <div style="display:flex; flex-direction:column; align-items:center; gap:15px; margin-top:20px;">
+            ${paperLinks}
+        </div>
+        
+        <br><br>
+        <button onclick="goToCompetitiveExams()">⬅ Back to Exam List</button>
+    `;
 }
 
 function goToPapers() {
     homePage.style.display = 'none';
-    audio.style.display = 'none';
+    video.style.display = 'none';
     pageTitle.innerHTML = '📄 Model Question Papers';
 
+    // Correctly displays model files (modelX.pdf)
     content.innerHTML = `
-        <h2>📄 Model Question Papers</h2>
+        <h2>📄 School Model Question Papers</h2>
         <p>Select any paper to open it. (Make sure it’s downloaded once for offline viewing.)</p>
 
         <div style="display:flex; flex-direction:column; align-items:center; gap:15px; margin-top:20px;">
-            <a href="model1.pdf" target="_blank" style="color:white; text-decoration:none; background:#2193b0; padding:10px 20px; border-radius:8px;">🧮 Math Model Paper</a>
-            <a href="model2.pdf" target="_blank" style="color:white; text-decoration:none; background:#2193b0; padding:10px 20px; border-radius:8px;">🔬 Science Model Paper</a>
-            <a href="model3.pdf" target="_blank" style="color:white; text-decoration:none; background:#2193b0; padding:10px 20px; border-radius:8px;">📘 English Model Paper</a>
+            <a href="model1.pdf" target="_blank">🧮 Math Model Paper</a>
+            <a href="model2.pdf" target="_blank">🔬 Science Model Paper</a>
+            <a href="model3.pdf" target="_blank">📘 English Model Paper</a>
         </div>
 
         <br><br>
@@ -65,15 +116,14 @@ function goToPapers() {
 
 function goToProgress() {
     homePage.style.display = 'none';
-    audio.style.display = 'none';
+    video.style.display = 'none'; 
     pageTitle.innerHTML = '📊 Your Progress';
 
-    // Get all items marked as "done" from local storage
     let completed = Object.keys(localStorage).filter(k => localStorage.getItem(k) === "done");
     
     let progressHTML = `
         <h2>📊 Your Progress</h2>
-        <div style="background: rgba(255, 255, 255, 0.9); color: #333; padding: 20px; border-radius: 12px; margin: 20px 0; max-width: 500px;">
+        <div style="background: rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 12px; margin: 20px 0; max-width: 500px;">
             <h3>Completed Units & Lessons:</h3>
             <p>Total Completed: <strong>${completed.length}</strong></p>
             <ul style="text-align: left; list-style-type: disc; padding-left: 20px;">
@@ -92,34 +142,24 @@ function goToAbout() {
     content.innerHTML = `
         <h2>💡 About</h2>
         <p>
-            This Offline AI Tutor helps students learn using simple lessons, quizzes, and audio support — 
-            even without internet connectivity! It works entirely on your device, keeping your data private and secure.
+            This Offline AI Tutor helps students learn using simple lessons, quizzes, and video support — 
+            even without internet connectivity!
         </p>
 
-        <h3>📘 How to Use the App</h3>
+        <h3>📘 Features</h3>
         <ul style="text-align:left; max-width:600px; margin:auto; list-style-type: circle;">
-            <li>🔹 Go to <b>Classes</b> to choose your class level (e.g., Class 6, 7, 8).</li>
-            <li>🔹 Select a <b>Subject</b> such as Math, Science, or English.</li>
-            <li>🔹 Pick a <b>Unit (1–10)</b> to study lessons and listen to audio explanations.</li>
-            <li>🔹 After each lesson, take a short quiz to check your understanding.</li>
-            <li>🔹 View your learning progress anytime in the <b>Progress</b> section.</li>
-            <li>🔹 Access <b>Model Question Papers</b> for exam preparation and practice.</li>
-            <li>🔹 You can use all features <b>completely offline</b> once installed.</li>
+            <li>🔹 **Classes:** Structured learning by class, subject, and unit.</li>
+            <li>🔹 **Competitive Exams:** Dedicated resources for NTSE, Olympiads, and other exams.</li>
+            <li>🔹 **Papers:** Access school model question papers for practice.</li>
+            <li>🔹 **Progress:** Track your quiz completion history.</li>
         </ul>
-
-        <h3>🔒 Privacy & Data</h3>
-        <p>
-            Your progress and learning data are stored only on your device. 
-            Nothing is uploaded online unless you manually enable sync in future versions.
-        </p>
 
         <br>
         <button onclick="goHome()">🏠 Back Home</button>
     `;
 }
 
-
-// --- Class System Functions ---
+// --- Class System Functions (Video Integration) ---
 
 function goToSubjects(classNum) {
     pageTitle.innerHTML = `📖 Class ${classNum} Subjects`;
@@ -138,6 +178,11 @@ function goToSubjects(classNum) {
 function goToUnits(classNum, subject) {
     pageTitle.innerHTML = `${subject} — Class ${classNum}`;
     let unitButtons = '';
+    
+    // Logic to create the textbook file name (e.g., class6_math_textbook.pdf)
+    const subjectLower = subject.toLowerCase();
+    const textbookFile = `class${classNum}_${subjectLower}_textbook.pdf`; 
+    
     for (let i = 1; i <= 10; i++) {
         const unitKey = `class${classNum}_${subject}_unit${i}`;
         const isDone = localStorage.getItem(unitKey) === "done";
@@ -146,8 +191,12 @@ function goToUnits(classNum, subject) {
 
     content.innerHTML = `
         <h2>${subject} — Class ${classNum}</h2>
-        <p>Select a unit to start learning:</p>
+        <p>Select a unit to start learning or view the full textbook:</p>
+        
         <div class="button-container" style="gap:10px;">
+            <a href="${textbookFile}" target="_blank" class="textbook-link">
+                📘 View Full Textbook
+            </a>
             ${unitButtons}
         </div>
         <br>
@@ -156,32 +205,28 @@ function goToUnits(classNum, subject) {
 }
 
 function openUnit(classNum, subject, unitNum) {
-    const audioFile = `class${classNum}_${subject.toLowerCase()}_unit${unitNum}.mp3`;
+    const videoFile = `class${classNum}_${subject.toLowerCase()}_unit${unitNum}.mp4`;
     pageTitle.innerHTML = `${subject} - Unit ${unitNum}`;
 
     content.innerHTML = `
         <h2>${subject} - Class ${classNum}</h2>
         <h3>Unit ${unitNum}</h3>
-        <p>This unit explains important concepts in ${subject}. Listen to the audio or take a quick quiz.</p>
+        <p>This unit explains important concepts in ${subject}. Watch the video lesson below and take a quick quiz.</p>
         <button onclick="answerUnitQuestion('class${classNum}_${subject}_unit${unitNum}')">Start Quiz</button>
         <br><br>
         <button onclick="goToUnits(${classNum}, '${subject}')">⬅ Back to Units</button>
     `;
 
-    audio.src = audioFile;
-    audio.style.display = 'block';
-    audio.play().catch(error => {
-        console.error('Audio playback failed (usually because file is missing):', error);
-        // Note: For a real offline app, ensure all audio files are in the cache via service-worker.
-        alert('Audio lesson not available offline. Please download content or check file name first.');
+    video.src = videoFile;
+    video.style.display = 'block';
+    video.play().catch(error => {
+        console.error('Video playback failed (File missing or browser blocked autoplay):', error);
+        alert('Video lesson not available offline. Please download content or check file name first.');
     });
 }
 
-/**
- * Handles the generic Unit completion quiz logic.
- */
 function answerUnitQuestion(unitKey) {
-    // We'll use a specific fixed answer for simplicity, but you can expand this later.
+    // Basic placeholder quiz functionality
     const correctAnswer = 'ok'; 
     let ans = prompt(`To complete this unit, type '${correctAnswer}' (for now):`);
     
@@ -189,7 +234,6 @@ function answerUnitQuestion(unitKey) {
         alert("✅ Unit Complete!");
         localStorage.setItem(unitKey, "done");
         
-        // Refresh the unit view to show the ✅
         const parts = unitKey.split('_');
         const classNum = parts[0].replace('class', '');
         const subject = parts[1];
@@ -200,13 +244,11 @@ function answerUnitQuestion(unitKey) {
     }
 }
 
-
-// --- Audio Error Handling ---
-audio.onerror = function() {
-    console.error('Error loading audio file:', audio.src);
-    // You could also update the UI here to show a broken audio icon
+// --- Video Error Handling ---
+video.onerror = function() {
+    console.error('Error loading video file:', video.src);
 };
 
-audio.onloadeddata = function() {
-    console.log('Audio file loaded successfully:', audio.src);
+video.onloadeddata = function() {
+    console.log('Video file loaded successfully:', video.src);
 };
